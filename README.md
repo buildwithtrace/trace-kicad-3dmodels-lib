@@ -1,3 +1,5 @@
+> **Trace's copy of the KiCad 3D model library.** [Trace](https://buildwithtrace.com) is an AI hardware design tool built on KiCad: describe the device you want in plain words, and Trace designs the circuit board and a 3D-printable case for it, checks the design and helps you order the board. Trace uses this library. Browse parts online at [components.buildwithtrace.com](https://components.buildwithtrace.com). The library itself comes from the [KiCad project](https://gitlab.com/kicad/libraries/kicad-packages3d); to contribute to it, follow KiCad's guidelines below and contribute upstream. New to electronics? Start with [How to design hardware with AI](https://buildwithtrace.com/design-hardware-with-ai).
+
 # KiCad 3D Models
 This repository contains 3D models for rendering and MCAD integration, for use with [KiCAD EDA](http://kicad.org/) software.
 The model needs a mechanical model source (a manually-modelled or script-generated file)

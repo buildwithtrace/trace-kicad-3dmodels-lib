@@ -53,6 +53,28 @@ make list_models
 
 The model list will be at `model_names.txt`
 
+## Checking that every footprint's model resolves (Trace)
+
+`tools/check_footprint_models.py` (Python 3, standard library only) reads every footprint in a
+checkout of [trace-kicad-footprints-lib](https://github.com/buildwithtrace/trace-kicad-footprints-lib)
+and reports each `(model "${KICAD10_3DMODEL_DIR}/...")` path that is not in this repository.
+It exits 1 if any are missing, 0 if none are.
+
+```
+python3 tools/check_footprint_models.py ../trace-kicad-footprints-lib
+python3 tools/check_footprint_models.py ../trace-kicad-footprints-lib --allowlist tools/known_missing_models.txt
+```
+
+About 6,800 model paths that stock KiCad 10 footprints name have never been released by KiCad,
+or were removed upstream as wrong. They are listed in `tools/known_missing_models.txt`; with
+`--allowlist` they are reported but don't fail, so the check catches only new gaps. When a model is
+added, remove its line (the check lists such entries as "stale"). `--write-missing FILE` writes the
+full unresolved list, and `--models-list FILE` takes the repo's file list (from
+`git ls-tree -r --name-only HEAD`) instead of a full checkout.
+
+The GitHub Actions workflow for this check is in `tools/ci/check-models.workflow.yml`. It is not
+active until a person moves it to `.github/workflows/`.
+
 ## External Model Libraries
 In addition to the 3D model data provided in this library, there are other sources that designers may use to source 3D models.
 

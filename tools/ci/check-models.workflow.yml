@@ -1,0 +1,62 @@
+# GitHub Actions workflow: check that every model the footprint library names
+# exists in this 3D model library.
+#
+# NOT ACTIVE YET. A person moves this file to .github/workflows/check-models.yml
+# (the agents' GitHub app has no "workflows" permission, so it cannot add it).
+#
+# It checks this repo against buildwithtrace/trace-kicad-footprints-lib (main by
+# default). Footprint changes land in the other repo, so it also runs daily.
+# Only tools/ is checked out here: the model list comes from `git ls-tree`, so
+# the ~500 MB of .step files is never downloaded.
+#
+# Known-missing models (no official KiCad release has them) are listed in
+# tools/known_missing_models.txt and do not fail the run; anything else does.
+
+name: Footprint 3D models resolve
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: '17 6 * * *'
+  workflow_dispatch:
+    inputs:
+      footprints_ref:
+        description: 'trace-kicad-footprints-lib branch, tag or sha to check'
+        required: false
+        default: 'main'
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out this repo (tools only, no model blobs)
+        uses: actions/checkout@v4
+        with:
+          path: models
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout: tools
+
+      - name: Check out the footprint library
+        uses: actions/checkout@v4
+        with:
+          repository: buildwithtrace/trace-kicad-footprints-lib
+          ref: ${{ github.event.inputs.footprints_ref || 'main' }}
+          path: footprints
+          fetch-depth: 1
+
+      - name: List the models in this repo
+        run: git -C models ls-tree -r --name-only HEAD > models-list.txt
+
+      - name: Check every footprint model resolves
+        run: >
+          python3 models/tools/check_footprint_models.py footprints
+          --models-list models-list.txt
+          --allowlist models/tools/known_missing_models.txt
+          --max-list 0

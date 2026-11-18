@@ -19,3 +19,6 @@ under the same licence (LICENSE.md), because Trace's stock footprints name them:
   `Package_DFN_QFN.3dshapes/Texas_RNQ0040A_WQFN-40-1EP_6x4mm_P0.4mm_EP4.7x2.7mm.step`
 - From KiCad tag 10.0.8 (KiCad commit 0bc64e92):
   `Package_DFN_QFN.3dshapes/WQFN-16-1EP_3x3mm_P0.5mm_EP1.68x1.68mm.step`
+- `Package_LGA.3dshapes/Infineon_PG-TSNP-6-10_0.7x1.1mm_0.7x1.1mm_P0.4mm.step` is a copy of KiCad's
+  `Package_DFN_QFN.3dshapes/` file of the same name (KiCad commit 121ca5f2, Carlos Nieves Ónega),
+  placed where the `Package_LGA` footprint looks for it.
